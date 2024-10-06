@@ -1,0 +1,55 @@
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv('path_to_your_downloaded_dataset.csv')
+
+# Basic preprocessing
+df = df[['title', 'text']]  # Keep only relevant columns
+df['text'] = df['text'].str.replace('[^a-zA-Z\s]', '', regex=True).str.lower()
+
+from sagemaker import get_execution_role
+from sagemaker.huggingface import HuggingFace
+
+role = get_execution_role()
+model_name = "Meta Llama 2 7B"  # Base model name
+
+huggingface_model = HuggingFace(
+    model_data=model_name,
+    role=role,
+    transformers_version='4.6.1',
+    pytorch_version='1.7.1',
+    py_version='py36',
+)
+
+predictor = huggingface_model.deploy(
+    initial_instance_count=1,
+    instance_type='ml.g4dn.xlarge'
+)
+
+from transformers import Trainer, TrainingArguments
+from datasets import load_dataset
+
+# Load your dataset from S3
+dataset = load_dataset('csv', data_files='s3://your-bucket/path_to_your_cleaned_dataset.csv')
+
+training_args = TrainingArguments(
+    output_dir='./results',
+    per_device_train_batch_size=4,
+    num_train_epochs=3,
+)
+
+trainer = Trainer(
+    model=huggingface_model,
+    args=training_args,
+    train_dataset=dataset['train'],
+)
+
+trainer.train()
+
+final_predictor = huggingface_model.deploy(
+    initial_instance_count=1,
+    instance_type='ml.g4dn.xlarge'
+)
+
+response = final_predictor.predict("What are the latest trends in the stock market?")
+print(response)
