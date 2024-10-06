@@ -1,0 +1,72 @@
+Project Documentation Report
+Title:
+FinAdvisor: AI-Powered Financial Knowledge Assistant
+
+Date:
+1/10/2024
+
+Team Members:
+Zeinab Ali AlZarkan
+
+1. Introduction
+This project aims to develop a domain expert model in the finance sector, leveraging a fine-tuned large language model to provide informative, accurate, and contextually relevant responses to user queries. The goal is to enhance customer experience through efficient information delivery in chat applications and knowledge platforms.
+
+2. Dataset Selection
+Dataset Description:
+The dataset selected for this project is the Kaggle Financial News Dataset, which contains news articles related to financial events, market trends, and economic indicators. The dataset is diverse, providing rich examples of financial terminology and language.
+
+Data Source:
+Kaggle Link: Kaggle Financial News Dataset
+S3 Bucket:
+The dataset was uploaded to an S3 bucket for easy access during the model training process. The S3 bucket is organized as follows:
+
+Bucket Name: [Your-Bucket-Name]
+Folder Structure:
+/data - Contains the financial news dataset.
+/models - For storing model outputs.
+3. Model Deployment
+The Llama2 model was deployed using AWS SageMaker, enabling the application of a pre-trained large language model for fine-tuning on the selected dataset.
+
+Deployment Steps:
+Set up the SageMaker Notebook environment.
+Deploy the pre-trained Llama2 model.
+Create a predictor for model evaluation.
+Deployment Process:
+The deployment involved selecting the appropriate instance type (e.g., ml.p3.2xlarge) for training and setting configurations for the model endpoint. Challenges included managing instance costs and ensuring proper permissions for S3 access.
+
+4. Model Evaluation
+Model_evaluation.ipynb
+This notebook was used to evaluate the performance of the pre-trained Llama2 model on finance-related queries. The evaluation process involved running various finance-specific questions and analyzing the accuracy and relevance of the responses.
+
+Key Queries Tested:
+
+"What are the latest trends in the stock market?"
+"How can I invest in mutual funds?"
+"What is the impact of inflation on savings?"
+Responses from the Model:
+The responses provided by the model were generally accurate, capturing essential aspects of the queries. Notable observations include:
+
+The model effectively highlighted recent market trends.
+It provided detailed information on investment strategies, albeit sometimes lacking depth in complex topics.
+
+5. Fine-Tuning Process
+Model_FineTuning.ipynb
+This notebook outlines the steps taken to fine-tune the Llama2 model on the selected finance dataset.
+
+Training Process:
+Load the dataset from S3.
+Set training arguments, including learning rate and batch size.
+Train the model using the Trainer API from Hugging Face.
+Training Metrics:
+Epochs: 3
+Batch Size: 4
+Training Output:
+The training process resulted in a decreasing loss value over epochs, indicating successful learning. (Insert any specific loss metrics or examples of outputs if available.)
+
+6. Conclusion
+The FinAdvisor model demonstrates significant potential in providing expert financial knowledge through AI-driven responses. The project successfully showcased how a large language model can be adapted to serve specific domain needs, enhancing customer engagement and information delivery.
+
+Future Recommendations:
+Continual Updates: Regularly update the model with new financial data to maintain relevance.
+Advanced Analytics: Expand the model's capabilities to include more advanced financial analytics.
+User Feedback: Implement mechanisms for user feedback to refine model responses over time.
