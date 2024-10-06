@@ -1,0 +1,20 @@
+from sagemaker import get_execution_role
+from sagemaker.huggingface import HuggingFace
+
+role = get_execution_role()
+
+huggingface_model = HuggingFace(
+    model_data='Meta Llama 2 7B',
+    role=role,
+    transformers_version='4.6.1',
+    pytorch_version='1.7.1',
+    py_version='py36',
+)
+
+predictor = huggingface_model.deploy(
+    initial_instance_count=1,
+    instance_type='ml.g4dn.xlarge'
+)
+
+response = predictor.predict("What is the current trend in the stock market?")
+print(response)
