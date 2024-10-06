@@ -1,0 +1,27 @@
+from transformers import Trainer, TrainingArguments
+from datasets import load_dataset
+
+# Load your dataset
+dataset = load_dataset('csv', data_files='s3://your-bucket/path_to_your_cleaned_dataset.csv')
+
+training_args = TrainingArguments(
+    output_dir='./results',
+    per_device_train_batch_size=4,
+    num_train_epochs=3,
+)
+
+trainer = Trainer(
+    model=huggingface_model,
+    args=training_args,
+    train_dataset=dataset['train'],
+)
+
+trainer.train()
+
+final_predictor = huggingface_model.deploy(
+    initial_instance_count=1,
+    instance_type='ml.g4dn.xlarge'
+)
+
+response_finetuned = final_predictor.predict("Explain the recent changes in stock trading regulations.")
+print(response_finetuned)
